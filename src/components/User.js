@@ -1,25 +1,35 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import BlogTile from './subcomponents/BlogTile';
-
+import axios from 'axios';
 // import axios
 
 class User extends Component{
-    constructor(){
+    constructor() {
         super()
 
-        this.state={
+        this.state = {
             user: {},
             posts: []
         }
     }
 
-    // insert componentWillMount
+    //insert componentWillMount
+    componentWillMount() {
+        let id = this.props.match.params.id;
+        axios.get(`/api/user/${id}`).then((response) => {
+            let user = response.data;
+            this.setState({ user: user });
+        });
+        axios.get(`/api/user/${id}`).then((response) => {
+            this.setState({ posts: response.data });
+        });
+    }
     
 
     render(){
-        const user = this.state.user
-        const posts = this.state.posts.map((c,i)=><BlogTile key={i} blog={c}/>)
+        const user = this.state.user;
+        const posts = this.state.posts.map((c, i) => <BlogTile key={i} blog={c} />);//GETTING ERROR HERE
         return (
             <div className='content'>
                 <div className="profile">
@@ -39,6 +49,6 @@ class User extends Component{
             </div>
         )
     }
-}
 
+}
 export default User
